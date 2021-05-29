@@ -1,7 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 #include <stdio.h>
-#define MAX_ELEMENT 200
+#define MAX_ELEMENT 100000
 
 typedef struct {
 	int key;
@@ -11,6 +11,16 @@ typedef struct {
 	element heap[MAX_ELEMENT];
 	int heap_size;
 }HeapType;
+
+HeapType* create()
+{
+	return (HeapType*)malloc(sizeof(HeapType));
+}
+
+void init(HeapType* h)
+{
+	h->heap_size = 0;
+}
 
 void insert_max_heap(HeapType* h, element item)
 {
@@ -25,8 +35,13 @@ void insert_max_heap(HeapType* h, element item)
 	h->heap[i] = item;
 }
 
-element delete_max_heap(HeapType* h)
+void delete_max_heap(HeapType* h)
 {
+	if (h->heap_size == 0) {
+		printf("0\n");
+		return;
+	}
+
 	int parent, child;
 	element item, temp;
 
@@ -34,5 +49,16 @@ element delete_max_heap(HeapType* h)
 	temp = h->heap[(h->heap_size)--];
 	parent = 1;
 	child = 2;
+	while (child <= h->heap_size) {
+		if ((child < h->heap_size) && (h->heap[child].key) < (h->heap[child + 1].key))
+			child++;
+		if (temp.key >= h->heap[child].key)
+			break;
 
+		h->heap[parent] = h->heap[child];
+		parent = child;
+		child *= 2;
+	}
+	h->heap[parent] = temp;
+	printf("%d\n", item.key);
 }
